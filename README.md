@@ -19,8 +19,7 @@ Pipeline support lets you 'copy' registry settings from one computer to another.
 
 Copy the module folder to your module path. PowerShell will take care of the rest.
 
-### Do not forget
-# Registry Caution 
-Do not use a registry editor to edit the registry directly unless you have no alternative. The registry editors bypass the standard safeguards provided by administrative tools. These safeguards prevent you from entering conflicting settings or settings that are likely to degrade performance or damage your system. Editing the registry directly can have serious, unexpected consequences that can prevent the system from starting and require that you reinstall Windows 2000[/XP/Vista]. To configure or customize Windows 2000[/XP/Vista], use the programs in Microsoft Management Console or Control Panel whenever possible. 
+### Please, do not forget Microsoft Registry caution 
+Do not edit the registry directly unless you have no alternative. The registry editor bypasses standard safeguards, allowing settings that can degrade performance, damage your system, or even require you to reinstall Windows. You can safely alter most registry settings by using the programs in Control Panel or Microsoft Management Console (MMC). If you must edit the registry directly, back it up first.
 
-Windows 2000 Resource Kit Registry Disclaimer Page
+
