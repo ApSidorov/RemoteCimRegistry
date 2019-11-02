@@ -1,0 +1,881 @@
+﻿<PowerShellMetadata xmlns="http://schemas.microsoft.com/cmdlets-over-objects/2009/11">
+  <Class ClassName="ROOT/DEFAULT/StdRegProv">
+    <Version>1.0.0.0</Version>
+    <DefaultNoun>CIMRegistry</DefaultNoun>
+
+    <StaticCmdlets>
+        <!--
+           //
+           // Get-cdxmlSubkeyName
+           //
+        -->
+        <Cmdlet>
+        <CmdletMetadata Verb="Get" Noun="cdxmlSubkeyName"/>
+          <Method MethodName="EnumKey">
+            <!-- Return Error -->
+            <!-- <ReturnValue>
+              <Type PSType="System.Int64"></Type>
+              <CmdletOutputMetadata>
+                <ErrorCode></ErrorCode>
+              </CmdletOutputMetadata>
+            </ReturnValue> -->
+            <Parameters>
+              <Parameter ParameterName="hDefKey">
+                <Type PSType="CIMRegistry.RootKey" />
+                <CmdletParameterMetadata PSName="RootKey" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+              <Parameter ParameterName="sSubKeyName">
+                <Type PSType="System.String" />
+                <CmdletParameterMetadata PSName="Key" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+
+              <!-- CMDLET OUTPUT -->
+              <Parameter ParameterName="sNames">
+                <Type PSType="System.String[]" />
+                <CmdletOutputMetadata/>
+              </Parameter>
+              <Parameter ParameterName="ReturnValue">
+                <Type PSType="System.UInt32" />
+                <CmdletOutputMetadata/>
+              </Parameter>
+              <Parameter ParameterName="PSComputerName">
+                <Type PSType="System.String" />
+                <CmdletOutputMetadata/>
+              </Parameter>
+            </Parameters>
+          </Method>
+        </Cmdlet>
+
+        <!--
+           //
+           // Get-cdxmlValueName
+           //
+        -->
+        <Cmdlet>
+        <CmdletMetadata Verb="Get" Noun="cdxmlValueName"/>
+          <Method MethodName="EnumValues">
+            <!-- Return Error -->
+            <!-- <ReturnValue>
+              <Type PSType="System.Int64"></Type>
+              <CmdletOutputMetadata>
+                <ErrorCode></ErrorCode>
+              </CmdletOutputMetadata>
+            </ReturnValue> -->
+
+            <Parameters>
+              <Parameter ParameterName="hDefKey">
+                <Type PSType="CIMRegistry.RootKey" />
+                <CmdletParameterMetadata PSName="RootKey" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+              <Parameter ParameterName="sSubKeyName">
+                <Type PSType="System.String" />
+                <CmdletParameterMetadata PSName="Key" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+              <!-- CMDLET OUTPUT -->
+              <Parameter ParameterName="sNames">
+                <Type PSType="System.String[]" />
+                <CmdletOutputMetadata />
+              </Parameter>
+              <Parameter ParameterName="Types">
+                <Type PSType="Int32[]" />
+                <CmdletOutputMetadata />
+              </Parameter>
+              <Parameter ParameterName="ReturnValue">
+                <Type PSType="System.UInt32" />
+                <CmdletOutputMetadata />
+              </Parameter>
+              <Parameter ParameterName="PSComputerName">
+                <Type PSType="System.String" />
+                <CmdletOutputMetadata/>
+              </Parameter>
+            </Parameters>
+          </Method>
+        </Cmdlet>
+
+        <!--
+           //
+           // Get-cdxmlDWORDValue (REG_DWORD)
+           //
+        -->
+        <Cmdlet>
+        <CmdletMetadata Verb="Get" Noun="cdxmlDWORDValue"/>
+          <Method MethodName="GetDWORDValue">
+            <!-- Return Error -->
+            <!-- <ReturnValue>
+              <Type PSType="System.Int64"></Type>
+              <CmdletOutputMetadata>
+                <ErrorCode></ErrorCode>
+              </CmdletOutputMetadata>
+            </ReturnValue> -->
+
+            <Parameters>
+              <Parameter ParameterName="hDefKey">
+                <Type PSType="CIMRegistry.RootKey" />
+                <CmdletParameterMetadata PSName="RootKey" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+              <Parameter ParameterName="sSubKeyName">
+                <Type PSType="System.String" />
+                <CmdletParameterMetadata IsMandatory="true" PSName="Key" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+              <Parameter ParameterName="sValueName">
+                <Type PSType="System.String" />
+                <CmdletParameterMetadata IsMandatory="true" PSName="ValueName" ValueFromPipelineByPropertyName="true">
+                    <AllowEmptyString />
+                </CmdletParameterMetadata>
+              </Parameter>
+              <!-- CMDLET OUTPUT -->
+              <Parameter ParameterName="uValue">
+                <Type PSType="System.UInt32" />
+                <CmdletOutputMetadata />
+              </Parameter>
+              <Parameter ParameterName="ReturnValue">
+                <Type PSType="System.UInt32" />
+                <CmdletOutputMetadata />
+              </Parameter>
+              <Parameter ParameterName="PSComputerName">
+                <Type PSType="System.String" />
+                <CmdletOutputMetadata/>
+              </Parameter>
+            </Parameters>
+          </Method>
+        </Cmdlet>
+
+        <!--
+           //
+           // Get-cdxmlQWORDValue (REG_QWORD)
+           //
+        -->
+        <Cmdlet>
+        <CmdletMetadata Verb="Get" Noun="cdxmlQWORDValue"/>
+          <Method MethodName="GetQWORDValue">
+            <!-- Return Error -->
+            <!-- <ReturnValue>
+              <Type PSType="System.Int64"></Type>
+              <CmdletOutputMetadata>
+                <ErrorCode></ErrorCode>
+              </CmdletOutputMetadata>
+            </ReturnValue> -->
+
+            <Parameters>
+              <Parameter ParameterName="hDefKey">
+                <Type PSType="CIMRegistry.RootKey" />
+                <CmdletParameterMetadata PSName="RootKey" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+              <Parameter ParameterName="sSubKeyName">
+                <Type PSType="System.String" />
+                <CmdletParameterMetadata IsMandatory="true" PSName="Key" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+              <Parameter ParameterName="sValueName">
+                <Type PSType="System.String" />
+                <CmdletParameterMetadata IsMandatory="true" PSName="ValueName" ValueFromPipelineByPropertyName="true">
+                    <AllowEmptyString />
+                </CmdletParameterMetadata>
+              </Parameter>
+              <!-- CMDLET OUTPUT -->
+              <Parameter ParameterName="uValue">
+                <Type PSType="System.UInt64" />
+                <CmdletOutputMetadata />
+              </Parameter>
+              <Parameter ParameterName="ReturnValue">
+                <Type PSType="System.UInt32" />
+                <CmdletOutputMetadata />
+              </Parameter>
+              <Parameter ParameterName="PSComputerName">
+                <Type PSType="System.String" />
+                <CmdletOutputMetadata/>
+              </Parameter>
+            </Parameters>
+          </Method>
+        </Cmdlet>
+
+        <!--
+           //
+           // Get-cdxmlStringValue (REG_SZ) : AllowEmptyString for Default Value
+           //
+        -->
+        <Cmdlet>
+        <CmdletMetadata Verb="Get" Noun="cdxmlStringValue"/>
+          <Method MethodName="GetStringValue">
+            <!-- Return Error -->
+            <!-- <ReturnValue>
+              <Type PSType="System.Int64"></Type>
+              <CmdletOutputMetadata>
+                <ErrorCode></ErrorCode>
+              </CmdletOutputMetadata>
+            </ReturnValue> -->
+
+            <Parameters>
+              <Parameter ParameterName="hDefKey">
+                <Type PSType="CIMRegistry.RootKey" />
+                <CmdletParameterMetadata PSName="RootKey" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+              <Parameter ParameterName="sSubKeyName">
+                <Type PSType="System.String" />
+                <CmdletParameterMetadata IsMandatory="true" PSName="Key" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+              <Parameter ParameterName="sValueName">
+                <Type PSType="System.String" />
+                <CmdletParameterMetadata IsMandatory="true" PSName="ValueName" ValueFromPipelineByPropertyName="true">
+                    <AllowEmptyString />
+                </CmdletParameterMetadata>
+              </Parameter>
+              <!-- CMDLET OUTPUT -->
+              <Parameter ParameterName="sValue">
+                <Type PSType="System.String" />
+                <CmdletOutputMetadata />
+              </Parameter>
+              <Parameter ParameterName="ReturnValue">
+                <Type PSType="System.UInt32" />
+                <CmdletOutputMetadata />
+              </Parameter>
+              <Parameter ParameterName="PSComputerName">
+                <Type PSType="System.String" />
+                <CmdletOutputMetadata/>
+              </Parameter>
+            </Parameters>
+          </Method>
+        </Cmdlet>
+
+        <!--
+           //
+           // Get-cdxmlMultiStringValue (REG_MULTI_SZ)
+           //
+        -->
+        <Cmdlet>
+        <CmdletMetadata Verb="Get" Noun="cdxmlMultiStringValue"/>
+          <Method MethodName="GetMultiStringValue">
+            <!-- Return Error -->
+            <!-- <ReturnValue>
+              <Type PSType="System.Int64"></Type>
+              <CmdletOutputMetadata>
+                <ErrorCode></ErrorCode>
+              </CmdletOutputMetadata>
+            </ReturnValue> -->
+
+            <Parameters>
+              <Parameter ParameterName="hDefKey">
+                <Type PSType="CIMRegistry.RootKey" />
+                <CmdletParameterMetadata PSName="RootKey" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+              <Parameter ParameterName="sSubKeyName">
+                <Type PSType="System.String" />
+                <CmdletParameterMetadata IsMandatory="true" PSName="Key" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+              <Parameter ParameterName="sValueName">
+                <Type PSType="System.String" />
+                <CmdletParameterMetadata IsMandatory="true" PSName="ValueName" ValueFromPipelineByPropertyName="true">
+                    <AllowEmptyString />
+                </CmdletParameterMetadata>
+              </Parameter>
+              <!-- CMDLET OUTPUT -->
+              <Parameter ParameterName="sValue">
+                <Type PSType="System.String[]" />
+                <CmdletOutputMetadata />
+              </Parameter>
+              <Parameter ParameterName="ReturnValue">
+                <Type PSType="System.UInt32" />
+                <CmdletOutputMetadata />
+              </Parameter>
+              <Parameter ParameterName="PSComputerName">
+                <Type PSType="System.String" />
+                <CmdletOutputMetadata/>
+              </Parameter>
+            </Parameters>
+          </Method>
+        </Cmdlet>
+
+        <!--
+           //
+           // Get-cdxmlExpandedStringValue (REG_EXPAND_SZ)
+           //
+        -->
+        <Cmdlet>
+        <CmdletMetadata Verb="Get" Noun="cdxmlExpandedStringValue"/>
+          <Method MethodName="GetExpandedStringValue">
+            <!-- Return Error -->
+            <!-- <ReturnValue>
+              <Type PSType="System.Int64"></Type>
+              <CmdletOutputMetadata>
+                <ErrorCode></ErrorCode>
+              </CmdletOutputMetadata>
+            </ReturnValue> -->
+
+            <Parameters>
+              <Parameter ParameterName="hDefKey">
+                <Type PSType="CIMRegistry.RootKey" />
+                <CmdletParameterMetadata PSName="RootKey" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+              <Parameter ParameterName="sSubKeyName">
+                <Type PSType="System.String" />
+                <CmdletParameterMetadata IsMandatory="true" PSName="Key" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+              <Parameter ParameterName="sValueName">
+                <Type PSType="System.String" />
+                <CmdletParameterMetadata IsMandatory="true" PSName="ValueName" ValueFromPipelineByPropertyName="true">
+                    <AllowEmptyString />
+                </CmdletParameterMetadata>
+              </Parameter>
+              <!-- CMDLET OUTPUT -->
+              <Parameter ParameterName="sValue">
+                <Type PSType="System.String" />
+                <CmdletOutputMetadata />
+              </Parameter>
+              <Parameter ParameterName="ReturnValue">
+                <Type PSType="System.UInt32" />
+                <CmdletOutputMetadata />
+              </Parameter>
+              <Parameter ParameterName="PSComputerName">
+                <Type PSType="System.String" />
+                <CmdletOutputMetadata/>
+              </Parameter>
+            </Parameters>
+          </Method>
+        </Cmdlet>
+
+        <!--
+           //
+           // Get-cdxmlBinaryValue (REG_BINARY)
+           //
+        -->
+        <Cmdlet>
+        <CmdletMetadata Verb="Get" Noun="cdxmlBinaryValue"/>
+          <Method MethodName="GetBinaryValue">
+            <!-- Return Error -->
+            <!-- <ReturnValue>
+              <Type PSType="System.Int64"></Type>
+              <CmdletOutputMetadata>
+                <ErrorCode></ErrorCode>
+              </CmdletOutputMetadata>
+            </ReturnValue> -->
+
+            <Parameters>
+              <Parameter ParameterName="hDefKey">
+                <Type PSType="CIMRegistry.RootKey" />
+                <CmdletParameterMetadata PSName="RootKey" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+              <Parameter ParameterName="sSubKeyName">
+                <Type PSType="System.String" />
+                <CmdletParameterMetadata IsMandatory="true" PSName="Key" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+              <Parameter ParameterName="sValueName">
+                <Type PSType="System.String" />
+                <CmdletParameterMetadata IsMandatory="true" PSName="ValueName" ValueFromPipelineByPropertyName="true">
+                    <AllowEmptyString />
+                </CmdletParameterMetadata>
+              </Parameter>
+              <!-- CMDLET OUTPUT -->
+              <Parameter ParameterName="uValue">
+                <Type PSType="System.Byte[]" />
+                <CmdletOutputMetadata />
+              </Parameter>
+              <Parameter ParameterName="ReturnValue">
+                <Type PSType="System.UInt32" />
+                <CmdletOutputMetadata />
+              </Parameter>
+              <Parameter ParameterName="PSComputerName">
+                <Type PSType="System.String" />
+                <CmdletOutputMetadata/>
+              </Parameter>
+            </Parameters>
+          </Method>
+        </Cmdlet>
+
+        <!--
+           //
+           // Test-cdxmlRegistryKeyAccess
+           //
+        -->
+        <Cmdlet>
+        <CmdletMetadata Verb="Test" Noun="cdxmlRegistryKeyAccess"/>
+          <Method MethodName="CheckAccess">
+            <!-- Return Error -->
+            <!-- <ReturnValue>
+              <Type PSType="System.Int64"></Type>
+              <CmdletOutputMetadata>
+                <ErrorCode></ErrorCode>
+              </CmdletOutputMetadata>
+            </ReturnValue> -->
+            <Parameters>
+              <Parameter ParameterName="hDefKey">
+                <Type PSType="CIMRegistry.RootKey" />
+                <CmdletParameterMetadata PSName="RootKey" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+              <Parameter ParameterName="sSubKeyName">
+                <Type PSType="System.String" />
+                <CmdletParameterMetadata PSName="Key" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+              <Parameter ParameterName="uRequired">
+                <Type PSType="System.UInt32" />
+                <CmdletParameterMetadata PSName="AccessRequired" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+              <!-- CMDLET OUTPUT -->
+              <Parameter ParameterName="bGranted">
+                <Type PSType="System.Boolean" />
+                <CmdletOutputMetadata />
+              </Parameter>
+              <Parameter ParameterName="ReturnValue">
+                <Type PSType="System.UInt32" />
+                <CmdletOutputMetadata/>
+              </Parameter>
+              <Parameter ParameterName="PSComputerName">
+                <Type PSType="System.String" />
+                <CmdletOutputMetadata/>
+              </Parameter>
+            </Parameters>
+          </Method>
+        </Cmdlet>
+
+        <!--
+           //
+           // New-cdxmlRegistryKey
+           //
+        -->
+        <Cmdlet>
+        <CmdletMetadata Verb="New" Noun="cdxmlRegistryKey"/>
+          <Method MethodName="CreateKey">
+            <!-- Return Error -->
+            <!-- <ReturnValue>
+              <Type PSType="System.Int64"></Type>
+              <CmdletOutputMetadata>
+                <ErrorCode></ErrorCode>
+              </CmdletOutputMetadata>
+            </ReturnValue> -->
+            <Parameters>
+              <Parameter ParameterName="hDefKey">
+                <Type PSType="CIMRegistry.RootKey" />
+                <CmdletParameterMetadata PSName="RootKey" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+              <Parameter ParameterName="sSubKeyName">
+                <Type PSType="System.String" />
+                <CmdletParameterMetadata PSName="Key" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+
+              <!-- CMDLET OUTPUT -->
+              <Parameter ParameterName="ReturnValue">
+                <Type PSType="System.UInt32" />
+                <CmdletOutputMetadata/>
+              </Parameter>
+              <Parameter ParameterName="PSComputerName">
+                <Type PSType="System.String" />
+                <CmdletOutputMetadata/>
+              </Parameter>
+            </Parameters>
+          </Method>
+        </Cmdlet>
+
+        <!--
+           //
+           // Remove-cdxmlRegistryKey
+           //
+        -->
+        <Cmdlet>
+        <CmdletMetadata Verb="Remove" Noun="cdxmlRegistryKey"/>
+          <Method MethodName="DeleteKey">
+            <!-- Return Error -->
+            <!-- <ReturnValue>
+              <Type PSType="System.Int64"></Type>
+              <CmdletOutputMetadata>
+                <ErrorCode></ErrorCode>
+              </CmdletOutputMetadata>
+            </ReturnValue> -->
+            <Parameters>
+              <Parameter ParameterName="hDefKey">
+                <Type PSType="CIMRegistry.RootKey" />
+                <CmdletParameterMetadata PSName="RootKey" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+              <Parameter ParameterName="sSubKeyName">
+                <Type PSType="System.String" />
+                <CmdletParameterMetadata PSName="Key" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+
+              <!-- CMDLET OUTPUT -->
+              <Parameter ParameterName="ReturnValue">
+                <Type PSType="System.UInt32" />
+                <CmdletOutputMetadata/>
+              </Parameter>
+              <Parameter ParameterName="PSComputerName">
+                <Type PSType="System.String" />
+                <CmdletOutputMetadata/>
+              </Parameter>
+            </Parameters>
+          </Method>
+        </Cmdlet>
+
+        <!--
+           //
+           // Remove-cdxmlRegistryValue
+           //
+        -->
+        <Cmdlet>
+        <CmdletMetadata Verb="Remove" Noun="cdxmlRegistryValue"/>
+          <Method MethodName="DeleteValue">
+            <!-- Return Error -->
+            <!-- <ReturnValue>
+              <Type PSType="System.Int64"></Type>
+              <CmdletOutputMetadata>
+                <ErrorCode></ErrorCode>
+              </CmdletOutputMetadata>
+            </ReturnValue> -->
+            <Parameters>
+              <Parameter ParameterName="hDefKey">
+                <Type PSType="CIMRegistry.RootKey" />
+                <CmdletParameterMetadata PSName="RootKey" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+              <Parameter ParameterName="sSubKeyName">
+                <Type PSType="System.String" />
+                <CmdletParameterMetadata PSName="Key" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+              <Parameter ParameterName="sValueName">
+                <Type PSType="System.String" />
+                <CmdletParameterMetadata IsMandatory="true" PSName="ValueName" ValueFromPipelineByPropertyName="true">
+                    <AllowEmptyString />
+                </CmdletParameterMetadata>
+              </Parameter>
+              <!-- CMDLET OUTPUT -->
+              <Parameter ParameterName="ReturnValue">
+                <Type PSType="System.UInt32" />
+                <CmdletOutputMetadata/>
+              </Parameter>
+              <Parameter ParameterName="PSComputerName">
+                <Type PSType="System.String" />
+                <CmdletOutputMetadata/>
+              </Parameter>
+            </Parameters>
+          </Method>
+        </Cmdlet>
+
+        <!--
+           //
+           // Set-cdxmlBinaryValue (REG_BINARY)
+           //
+        -->
+        <Cmdlet>
+        <CmdletMetadata Verb="Set" Noun="cdxmlBinaryValue"/>
+          <Method MethodName="SetBinaryValue">
+            <!-- Return Error -->
+            <!-- <ReturnValue>
+              <Type PSType="System.Int64"></Type>
+              <CmdletOutputMetadata>
+                <ErrorCode></ErrorCode>
+              </CmdletOutputMetadata>
+            </ReturnValue> -->
+
+            <Parameters>
+              <Parameter ParameterName="hDefKey">
+                <Type PSType="CIMRegistry.RootKey" />
+                <CmdletParameterMetadata PSName="RootKey" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+              <Parameter ParameterName="sSubKeyName">
+                <Type PSType="System.String" />
+                <CmdletParameterMetadata IsMandatory="true" PSName="Key" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+              <Parameter ParameterName="sValueName">
+                <Type PSType="System.String" />
+                <CmdletParameterMetadata IsMandatory="true" PSName="ValueName" ValueFromPipelineByPropertyName="true">
+                    <AllowEmptyString />
+                </CmdletParameterMetadata>
+              </Parameter>
+              <Parameter ParameterName="uValue">
+                <Type PSType="System.Byte[]" />
+                <CmdletParameterMetadata IsMandatory="true" PSName="Data" ValueFromPipelineByPropertyName="true">
+                    <AllowEmptyString />
+                </CmdletParameterMetadata>
+              </Parameter>
+              <!-- CMDLET OUTPUT -->
+              <Parameter ParameterName="ReturnValue">
+                <Type PSType="System.UInt32" />
+                <CmdletOutputMetadata />
+              </Parameter>
+              <Parameter ParameterName="PSComputerName">
+                <Type PSType="System.String" />
+                <CmdletOutputMetadata/>
+              </Parameter>
+            </Parameters>
+          </Method>
+        </Cmdlet>
+
+        <!--
+           //
+           // Set-cdxmlDWORDValue (REG_DWORD)
+           //
+        -->
+        <Cmdlet>
+        <CmdletMetadata Verb="Set" Noun="cdxmlDWORDValue"/>
+          <Method MethodName="SetDWORDValue">
+            <!-- Return Error -->
+            <!-- <ReturnValue>
+              <Type PSType="System.Int64"></Type>
+              <CmdletOutputMetadata>
+                <ErrorCode></ErrorCode>
+              </CmdletOutputMetadata>
+            </ReturnValue> -->
+
+            <Parameters>
+              <Parameter ParameterName="hDefKey">
+                <Type PSType="CIMRegistry.RootKey" />
+                <CmdletParameterMetadata PSName="RootKey" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+              <Parameter ParameterName="sSubKeyName">
+                <Type PSType="System.String" />
+                <CmdletParameterMetadata IsMandatory="true" PSName="Key" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+              <Parameter ParameterName="sValueName">
+                <Type PSType="System.String" />
+                <CmdletParameterMetadata IsMandatory="true" PSName="ValueName" ValueFromPipelineByPropertyName="true">
+                    <AllowEmptyString />
+                </CmdletParameterMetadata>
+              </Parameter>
+              <Parameter ParameterName="uValue">
+                <Type PSType="System.UInt32" />
+                <CmdletParameterMetadata IsMandatory="true" PSName="Data" ValueFromPipelineByPropertyName="true">
+                    <AllowEmptyString />
+                </CmdletParameterMetadata>
+              </Parameter>
+              <!-- CMDLET OUTPUT -->
+              <Parameter ParameterName="ReturnValue">
+                <Type PSType="System.UInt32" />
+                <CmdletOutputMetadata />
+              </Parameter>
+              <Parameter ParameterName="PSComputerName">
+                <Type PSType="System.String" />
+                <CmdletOutputMetadata/>
+              </Parameter>
+            </Parameters>
+          </Method>
+        </Cmdlet>
+
+        <!--
+           //
+           // Set-cdxmlExpandedStringValue (REG_EXPAND_SZ)
+           //
+        -->
+        <Cmdlet>
+        <CmdletMetadata Verb="Set" Noun="cdxmlExpandedStringValue"/>
+          <Method MethodName="SetExpandedStringValue">
+            <!-- Return Error -->
+            <!-- <ReturnValue>
+              <Type PSType="System.Int64"></Type>
+              <CmdletOutputMetadata>
+                <ErrorCode></ErrorCode>
+              </CmdletOutputMetadata>
+            </ReturnValue> -->
+
+            <Parameters>
+              <Parameter ParameterName="hDefKey">
+                <Type PSType="CIMRegistry.RootKey" />
+                <CmdletParameterMetadata PSName="RootKey" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+              <Parameter ParameterName="sSubKeyName">
+                <Type PSType="System.String" />
+                <CmdletParameterMetadata IsMandatory="true" PSName="Key" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+              <Parameter ParameterName="sValueName">
+                <Type PSType="System.String" />
+                <CmdletParameterMetadata IsMandatory="true" PSName="ValueName" ValueFromPipelineByPropertyName="true">
+                    <AllowEmptyString />
+                </CmdletParameterMetadata>
+              </Parameter>
+              <Parameter ParameterName="sValue">
+                <Type PSType="System.String" />
+                <CmdletParameterMetadata IsMandatory="true" PSName="Data" ValueFromPipelineByPropertyName="true">
+                    <AllowEmptyString />
+                </CmdletParameterMetadata>
+              </Parameter>
+              <!-- CMDLET OUTPUT -->
+              <Parameter ParameterName="ReturnValue">
+                <Type PSType="System.UInt32" />
+                <CmdletOutputMetadata />
+              </Parameter>
+              <Parameter ParameterName="PSComputerName">
+                <Type PSType="System.String" />
+                <CmdletOutputMetadata/>
+              </Parameter>
+            </Parameters>
+          </Method>
+        </Cmdlet>
+
+        <!--
+           //
+           // Set-cdxmlMultiStringValue (REG_MULTI_SZ)
+           //
+        -->
+        <Cmdlet>
+        <CmdletMetadata Verb="Set" Noun="cdxmlMultiStringValue"/>
+          <Method MethodName="SetMultiStringValue">
+            <!-- Return Error -->
+            <!-- <ReturnValue>
+              <Type PSType="System.Int64"></Type>
+              <CmdletOutputMetadata>
+                <ErrorCode></ErrorCode>
+              </CmdletOutputMetadata>
+            </ReturnValue> -->
+
+            <Parameters>
+              <Parameter ParameterName="hDefKey">
+                <Type PSType="CIMRegistry.RootKey" />
+                <CmdletParameterMetadata PSName="RootKey" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+              <Parameter ParameterName="sSubKeyName">
+                <Type PSType="System.String" />
+                <CmdletParameterMetadata IsMandatory="true" PSName="Key" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+              <Parameter ParameterName="sValueName">
+                <Type PSType="System.String" />
+                <CmdletParameterMetadata IsMandatory="true" PSName="ValueName" ValueFromPipelineByPropertyName="true">
+                    <AllowEmptyString />
+                </CmdletParameterMetadata>
+              </Parameter>
+              <Parameter ParameterName="sValue">
+                <Type PSType="System.String[]" />
+                <CmdletParameterMetadata IsMandatory="true" PSName="Data" ValueFromPipelineByPropertyName="true">
+                    <AllowEmptyString />
+                </CmdletParameterMetadata>
+              </Parameter>
+              <!-- CMDLET OUTPUT -->
+              <Parameter ParameterName="ReturnValue">
+                <Type PSType="System.UInt32" />
+                <CmdletOutputMetadata />
+              </Parameter>
+              <Parameter ParameterName="PSComputerName">
+                <Type PSType="System.String" />
+                <CmdletOutputMetadata/>
+              </Parameter>
+            </Parameters>
+          </Method>
+        </Cmdlet>
+
+        <!--
+           //
+           // Set-cdxmlQWORDValue (REG_QWORD)
+           //
+        -->
+        <Cmdlet>
+        <CmdletMetadata Verb="Set" Noun="cdxmlQWORDValue"/>
+          <Method MethodName="SetQWORDValue">
+            <!-- Return Error -->
+            <!-- <ReturnValue>
+              <Type PSType="System.Int64"></Type>
+              <CmdletOutputMetadata>
+                <ErrorCode></ErrorCode>
+              </CmdletOutputMetadata>
+            </ReturnValue> -->
+
+            <Parameters>
+              <Parameter ParameterName="hDefKey">
+                <Type PSType="CIMRegistry.RootKey" />
+                <CmdletParameterMetadata PSName="RootKey" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+              <Parameter ParameterName="sSubKeyName">
+                <Type PSType="System.String" />
+                <CmdletParameterMetadata IsMandatory="true" PSName="Key" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+              <Parameter ParameterName="sValueName">
+                <Type PSType="System.String" />
+                <CmdletParameterMetadata IsMandatory="true" PSName="ValueName" ValueFromPipelineByPropertyName="true">
+                    <AllowEmptyString />
+                </CmdletParameterMetadata>
+              </Parameter>
+              <Parameter ParameterName="uValue">
+                <Type PSType="System.UInt64" />
+                <CmdletParameterMetadata IsMandatory="true" PSName="Data" ValueFromPipelineByPropertyName="true">
+                    <AllowEmptyString />
+                </CmdletParameterMetadata>
+              </Parameter>
+              <!-- CMDLET OUTPUT -->
+              <Parameter ParameterName="ReturnValue">
+                <Type PSType="System.UInt32" />
+                <CmdletOutputMetadata />
+              </Parameter>
+              <Parameter ParameterName="PSComputerName">
+                <Type PSType="System.String" />
+                <CmdletOutputMetadata/>
+              </Parameter>
+            </Parameters>
+          </Method>
+        </Cmdlet>
+
+        <!--
+           //
+           // Set-cdxmlStringValue (REG_SZ)
+           //
+        -->
+        <Cmdlet>
+        <CmdletMetadata Verb="Set" Noun="cdxmlStringValue"/>
+          <Method MethodName="SetStringValue">
+            <!-- Return Error -->
+            <!-- <ReturnValue>
+              <Type PSType="System.Int64"></Type>
+              <CmdletOutputMetadata>
+                <ErrorCode></ErrorCode>
+              </CmdletOutputMetadata>
+            </ReturnValue> -->
+
+            <Parameters>
+              <Parameter ParameterName="hDefKey">
+                <Type PSType="CIMRegistry.RootKey" />
+                <CmdletParameterMetadata PSName="RootKey" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+              <Parameter ParameterName="sSubKeyName">
+                <Type PSType="System.String" />
+                <CmdletParameterMetadata IsMandatory="true" PSName="Key" ValueFromPipelineByPropertyName="true" />
+              </Parameter>
+              <Parameter ParameterName="sValueName">
+                <Type PSType="System.String" />
+                <CmdletParameterMetadata IsMandatory="true" PSName="ValueName" ValueFromPipelineByPropertyName="true">
+                    <AllowEmptyString />
+                </CmdletParameterMetadata>
+              </Parameter>
+              <Parameter ParameterName="sValue">
+                <Type PSType="System.String" />
+                <CmdletParameterMetadata IsMandatory="true" PSName="Data" ValueFromPipelineByPropertyName="true">
+                    <AllowEmptyString />
+                </CmdletParameterMetadata>
+              </Parameter>
+              <!-- CMDLET OUTPUT -->
+              <Parameter ParameterName="ReturnValue">
+                <Type PSType="System.UInt32" />
+                <CmdletOutputMetadata />
+              </Parameter>
+              <Parameter ParameterName="PSComputerName">
+                <Type PSType="System.String" />
+                <CmdletOutputMetadata/>
+              </Parameter>
+            </Parameters>
+          </Method>
+        </Cmdlet>
+
+
+    </StaticCmdlets>
+   </Class>
+    <Enums>
+        <Enum EnumName="CIMRegistry.RootKey" UnderlyingType="System.UInt32">
+            <Value Name="HKEY_LOCAL_MACHINE" Value="2147483650" />
+            <Value Name="HKEY_CURRENT_USER" Value="2147483649" />
+            <Value Name="HKEY_USERS"  Value="2147483651" />
+            <Value Name="HKEY_CURRENT_CONFIG" Value="2147483653" />
+            <Value Name="HKEY_CLASSES_ROOT" Value="2147483648" />
+            <Value Name="HKEY_PERFORMANCE_DATA" Value="2147483652" />
+        </Enum>
+
+        <Enum EnumName="CIMRegistry.Permission" UnderlyingType="System.UInt32">
+            <Value Name="KEY_QUERY_VALUE"        Value="1" />
+            <Value Name="KEY_SET_VALUE"          Value="2" />
+            <Value Name="Default"                Value="3" />
+            <Value Name="KEY_CREATE_SUB_KEY"     Value="4" />
+            <Value Name="KEY_ENUMERATE_SUB_KEYS" Value="8" />
+            <Value Name="KEY_NOTIFY"             Value="16" />
+            <Value Name="KEY_CREATE"             Value="32" />
+            <Value Name="DELETE"                 Value="65536" />
+            <Value Name="READ_CONTROL"           Value="131072" />
+            <Value Name="WRITE_DAC"              Value="262144" />
+            <Value Name="WRITE_OWNER"            Value="524288" />
+        <!-- Notes:
+            # Delaut 3 # (KEY_QUERY_VALUE | KEY_SET_VALUE)
+            # Default value, allows querying, creating, deleting, or setting a registry value.
+
+            # READ_CONTROL (131072)
+            # Combines the STANDARD_RIGHTS_READ, KEY_QUERY_VALUE, KEY_ENUMERATE_SUB_KEYS, and KEY_NOTIFY values.
+        -->
+        </Enum>
+    </Enums>
+</PowerShellMetadata>

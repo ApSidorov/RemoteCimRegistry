@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Types>
+  <Type>
+    <Name>CIMRegistryKey</Name>
+    <Members>
+      <ScriptProperty>
+        <Name>ParentKey</Name>
+          <GetScriptBlock>
+              ($this.Path).Substring(0, ($this.Path).LastIndexOf('\'))
+          </GetScriptBlock>
+      </ScriptProperty>
+      <ScriptProperty>
+        <Name>Key</Name>
+          <GetScriptBlock>
+              ($this.Path).Substring(($this.Path).LastIndexOf('\') + 1)
+          </GetScriptBlock>
+      </ScriptProperty>
+    </Members>
+  </Type>
+</Types>
