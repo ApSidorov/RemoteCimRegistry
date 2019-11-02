@@ -27,4 +27,4 @@ Do not edit the registry directly unless you have no alternative. The registry e
 
 **Staffan Gustafsson** - for priceless lessons on developing PowerShell modules (PSCONF.EU 2017).
 
-**Adam Bertram** - for *The Pester Book* and his video cource *Testing PowerShell with Pester* on MVA. No big project can be done without a proper testing. 
+**Adam Bertram** - for *The Pester Book* and his video cource *Testing PowerShell with Pester* on MVA. No big project can be done without proper testing. 
