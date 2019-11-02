@@ -19,7 +19,7 @@ Pipeline support lets you 'copy' registry settings from one computer to another.
 
 Copy the module folder to your module path. PowerShell will take care of the rest.
 
-### Please, do not forget Microsoft Registry caution 
+### Please, do not forget Microsoft Registry caution:
 Do not edit the registry directly unless you have no alternative. The registry editor bypasses standard safeguards, allowing settings that can degrade performance, damage your system, or even require you to reinstall Windows. You can safely alter most registry settings by using the programs in Control Panel or Microsoft Management Console (MMC). If you must edit the registry directly, back it up first.
 
 
