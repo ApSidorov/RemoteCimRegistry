@@ -6,7 +6,7 @@ The module was created to make remote access to Windows registry more convenient
 ### Restrictions
 The module's functions use the WMI registry provider (StdRegProv) to access a Windows registry. There are some restrictions due to the nature of StdRegProv:
 * StdRegProv automatically expands enironment variables.  
-For instance, '**ProgramFilesPath**' registry value is located in '**HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion**' and contains '__%ProgramFiles%__'. When you read it, it will be replaced by 'C:\Program Files'. There is no way to get a real data using WMI.
+For instance,  registry value '**ProgramFilesPath**' (type REG_EXPAND_SZ) is located in  '**HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion**' key and contains '__%ProgramFiles%__' string. When you read it, it will be replaced by '**C:\Program Files**'. There is no way to get a real data from such values using WMI. 
 * You cannot rename a registry key. You have to delete it and create a new one.
 * You cannot remove a registry key if it has any subkeys. You have to delete all its subkeys at first.
 
