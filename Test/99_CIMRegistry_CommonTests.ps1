@@ -61,7 +61,7 @@ Describe "Common tests for $FunctionName" {
     $NoSuchKeyPath = 'HKEY_LOCAL_MACHINE\' + $NoSuchKeyName
     Mock Test-cdxmlRegistryKeyAccess  { [PSCustomObject]@{ReturnValue = 2; bGranted = $false} } { $PSBoundParameters.Key -eq $NoSuchKeyName }
 
-    # 
+    #
 
 
 #endregion
@@ -227,7 +227,7 @@ Describe "Common tests for $FunctionName" {
                      It 'CimSessionId is empty' {
                          $NativeResult.CimSessionId | Should -BeNullOrEmpty
                      }
-                 }            
+                 }
              } # 'Native object type'
 
             Context 'PSCustomObject type' {
@@ -250,10 +250,10 @@ Describe "Common tests for $FunctionName" {
                      It 'CimSessionId is empty' {
                          $PSCustomResult.CimSessionId | Should -BeNullOrEmpty
                      }
-                 }            
+                 }
              } # 'Native object type'
 
-        }  #'Local query' 
+        }  #'Local query'
 
         Context 'Temporary CIMSession' {
 
@@ -281,7 +281,7 @@ Describe "Common tests for $FunctionName" {
                          $NativeResult.Protocol | Should -Be 'Wsman'
                      }
 
-                 }            
+                 }
             } # 'Native object type'
 
             Context 'PSCustomObject type' {
@@ -308,7 +308,7 @@ Describe "Common tests for $FunctionName" {
                      It 'Protocol was changed correctly' {
                          $PSCustomResult.Protocol | Should -Be 'Dcom'
                      }
-                 }            
+                 }
             } # 'Native object type'
 
          }  # 'Temporary CIMSession'
@@ -334,7 +334,7 @@ Describe "Common tests for $FunctionName" {
                      It 'CimSessionId is correct' {
                          $NativeResult.CimSessionId | Should -Be $ExistingCimSession.InstanceId
                      }
-                 }            
+                 }
              } # 'Native object type'
 
             Context 'PSCustomObject type' {
@@ -359,7 +359,7 @@ Describe "Common tests for $FunctionName" {
                      It 'CimSessionId is empty' {
                          $PSCustomResult.CimSessionId | Should -BeNullOrEmpty
                      }
-                 }            
+                 }
              } # 'Native object type'
 
          }  # 'Pre-existing CIMsession'
@@ -370,7 +370,7 @@ Describe "Common tests for $FunctionName" {
         $ThreeKeys = 1..3 | ForEach-Object {Get-RegistryKey -Path $MockKeyPath}
         $ThreeKeys[1].Path = $MockNoAccessKeyPath
         $PartialResult = $ThreeKeys | & $FunctionName -ErrorAction Stop @ExtraParams
- 
+
         It 'Continues pipeline operations after a WMI error' {
             $PartialResult = $ThreeKeys | & $FunctionName @ExtraParams
             Assert-MockCalled Test-cdxmlRegistryKeyAccess -Times 3 -Exactly -Scope It
@@ -379,7 +379,7 @@ Describe "Common tests for $FunctionName" {
         If ($CheckOutput) {
             It 'Skips an error object returns with the rest' {
                 $PartialResult.Count | Should -Be 2
-            } 
+            }
         }
     }
 #>
