@@ -15,7 +15,7 @@ RootModule = 'RemoteCimRegistry.psm1'
 ModuleVersion = '0.0.2'
 
 # Supported PSEditions
-# CompatiblePSEditions = @()
+CompatiblePSEditions = @('PSEdition_Desktop')
 
 # ID used to uniquely identify this module
 GUID = 'd2584cee-8b02-42f1-9c12-ce84e1469ca5'
@@ -33,7 +33,7 @@ Copyright = '(c) 2018 Alex Sidorov. All rights reserved.'
 Description = 'Module provides functions to read, write and delete information in the Windows Registry'
 
 # Minimum version of the Windows PowerShell engine required by this module
-PowerShellVersion = '5.0'
+PowerShellVersion = '5.1'
 
 # Name of the Windows PowerShell host required by this module
 # PowerShellHostName = ''
@@ -95,13 +95,13 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        # Tags = @()
+        Tags = @('Module','Windows','Registry','Remote')
 
         # A URL to the license for this module.
-        # LicenseUri = ''
+        LicenseUri = 'https://github.com/ApSidorov/RemoteCimRegistry/blob/master/LICENSE.txt'
 
         # A URL to the main website for this project.
-        # ProjectUri = ''
+        ProjectUri = 'https://github.com/ApSidorov/RemoteCimRegistry'
 
         # A URL to an icon representing this module.
         # IconUri = ''
