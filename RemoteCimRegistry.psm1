@@ -1592,3 +1592,34 @@ Function New-TargetString ($ComputerName, $Path, $ValueName) {
     }
 }
 
+Function Get-REG_EXPAND_SZ ($ComputerName, $RootKey, $Key, $ValueName) {
+    $RootUInt = @{
+        'HKEY_CLASSES_ROOT'     = [UInt32]2147483648
+        'HKEY_CURRENT_USER'     = [UInt32]2147483649
+        'HKEY_LOCAL_MACHINE'    = [UInt32]2147483650
+        'HKEY_USERS'            = [UInt32]2147483651
+        'HKEY_PERFORMANCE_DATA' = [UInt32]2147483652
+        'HKEY_CURRENT_CONFIG'   = [UInt32]2147483653
+    }
+    If ($ComputerName) {
+        $RegRootKey = [Microsoft.Win32.RegistryKey]::OpenRemoteBaseKey($RootUInt[$RootKey], $ComputerName)
+    } Else {
+        $RegRootKey = [Microsoft.Win32.RegistryKey]::OpenBaseKey($RootUInt[$RootKey], [Microsoft.Win32.RegistryView]::Registry64)
+    }
+
+    $RegKey = $RegRootKey.OpenSubKey($Key,$false) # not writtable
+    $RegExpandValue = $RegKey.GetValue($ValueName,$null,[Microsoft.Win32.RegistryValueOptions]'DoNotExpandEnvironmentNames')
+
+    $RegKey.Close()        # Close and write to disk (Flush())
+    $RegKey.Dispose()      # Releases all resources (very good practice)
+    $RegRootKey.Close() # No effect to system keys, because system keys are never closed.
+    $RegRootKey.Dispose()
+
+    $RegExpandValue
+}
+
+
+# Get-REG_EXPAND_SZ -ComputerName CM01 -RootKey 'HKEY_LOCAL_MACHINE' -Key 'SYSTEM\CurrentControlSet\Control\ComputerName\ComputerName' -ValueName ComputerName
+# Get-REG_EXPAND_SZ -RootKey 'HKEY_LOCAL_MACHINE' -Key 'SYSTEM\CurrentControlSet\Control\ComputerName\ComputerName' -ValueName ComputerName
+
+
