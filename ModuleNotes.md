@@ -14,7 +14,7 @@ Please, in such cases use native PowerShell features, like HKLM:\ PSDrive.
 
 
 ## Network connections
-The module functions create teo types of objects: RegistryKey and RegistryValue. Each object has full network information about its origin. For instance: 
+The module functions create two types of objects: RegistryKey and RegistryValue. Each object has full network information about its origin. For instance: 
 - PSComputerName : DC01
 - Protocol       : WSMAN
 - CimSessionId   : 1529d220-170f-4023-9449-a983feae433c
@@ -26,21 +26,21 @@ CimSessionId keeps information about pre-created CimSession.
 Several examples:
 ### Temporary CimSessions
 
-**PS C:\> Get-RegistrySubkey -Path 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion'-ComputerName DC01 | Get-RegistryKey**
+**PS C:\> Get-RegistrySubkey -Path 'HKEY_LOCAL_MACHINE\SOFTWARE' -ComputerName DC01 | Get-RegistryKey**
 1. Get-RegistryKey will: 
-   - create a temporary CimSession
-   - send a RegistryKey object to the pipeline. 
+   - create a temporary CimSession and read subkeys,
+   - send a RegistryKey objects to the pipeline, 
    - close the temporary CimSession
-2. Get-RegistryValue will: 
-   - read with PSComputerName and Protocol information form input objects
-   - open another temporary CimSession and read registry values
-   - close the second temporary CimSession
+2. Get-RegistryKey will: 
+   - read with PSComputerName and Protocol information form  each input object,
+   - open a temporary CimSession for each subkey and read additional info about subkeys,
+   - close each temporary CimSession
 
 ### Pre-created CimSession
 
 **PS C:\> $CimSess = New-CimSession -ComputerName DC01**
 
-**PS C:\> Get-RegistrySubkey -Path 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion'-CimSession $CimSess | Get-RegistryKey**
+**PS C:\> Get-RegistrySubkey -Path 'HKEY_LOCAL_MACHINE\SOFTWARE' -CimSession $CimSess | Get-RegistryKey**
 
 You create a CimSession object and then run the second command.
 1. Get-RegistrySubkey command will:
@@ -53,14 +53,15 @@ You create a CimSession object and then run the second command.
 
 It works much faster and consume much less resources.
 
-If a pre-created session doesn’t exist anymore, the functions will open a temporary CimSession using PSComputerName and Protocol properties of an input object. 
+**Note**: If a pre-created session doesn’t exist anymore, the functions will open a temporary CimSession using PSComputerName and Protocol properties of an input object. 
 
 ### Overwriting the network information from an object.
 You can always overwrite a network information:
 
-**PS C:\> Get-RegistrySubkey -Path 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion'-ComputerName DC01 | Get-RegistryKey -CimSession $CimSess**
+**PS C:\> Get-RegistrySubkey -Path 'HKEY_LOCAL_MACHINE\SOFTWARE' -ComputerName DC01 | Get-RegistryKey -CimSession $CimSess**
 
 or
-**PS C:\> Get-RegistrySubkey -Path 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion'-CimSession $CimSess | Get-RegistryKey -ComputerName WKS003 -Protocol Dcom**
 
-In both cases the second command on the pipeline will ignore the network information and use whatever you pass to the parameters.
+**PS C:\> Get-RegistrySubkey -Path 'HKEY_LOCAL_MACHINE\SOFTWARE' -CimSession $CimSess | Get-RegistryKey -ComputerName WKS003 -Protocol Dcom**
+
+In both cases the second command on the pipeline will ignore the network information from an input object and use whatever you pass to the parameters.
