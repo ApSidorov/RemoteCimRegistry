@@ -373,12 +373,12 @@ Describe 'Get functions' {
         Context 'Invalid values' {
             $InvalidValue = Get-RegistryValue -Path $InvalidValueKeyPath -ValueName BinData
             It 'Marks invalid values as invalid' {
-                $InvalidValue.InvalidData | Should -Be $true
+                $InvalidValue.ErrorCode | Should -Not -Be 0
             } # -Skip
 
             $GoodValue = Get-RegistryValue -Path $MockKeyPath -ValueName Dword
             It 'Does not mark good values as invalid' {
-                $GoodValue.InvalidData | Should -Be $false
+                $GoodValue.ErrorCode | Should -Be 0
             }
 
         }

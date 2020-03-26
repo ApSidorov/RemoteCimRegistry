@@ -83,6 +83,11 @@ Describe "Common tests for $FunctionName" {
             { & $FunctionName -Path 'NO_SUCH_ROOTKEY\SOFTWARE' -ErrorAction Stop @ExtraParams } | Should Throw 'is not a valid registry root key'
         }
 
+        It 'Accepts short RootKey name' {
+            { & $FunctionName -Path ($MockKeyPath -replace 'HKEY_LOCAL_MACHINE', 'HKLM') -ErrorAction Stop @ExtraParams } | Should -Not -Throw
+        }
+
+
         It "Returns $WrongPathReturn if Path does not exist" {
             If ($WrongPathReturn -eq 'Error') {
                 {& $FunctionName -Path $NoSuchKeyPath -ErrorAction Stop @ExtraParams } | Should Throw 'Registry key does not exist'

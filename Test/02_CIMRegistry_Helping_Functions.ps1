@@ -389,6 +389,83 @@ Describe 'Helping Functions' {
 
          } # Context #3
 
+        Context "Localhost handling" {
+            $isSessionTemporary = $false
+
+            It 'Returns no Cimsession if ComputerName and CimSession are omitted' {
+                $Fake_PSBoundParameters = @{
+                    Path = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\TestInc'
+                }
+                $ResultingParams = New-ParameterTable -BoundParams $Fake_PSBoundParameters -ParameterSetName 'ByParameters' -TempFlag ([ref]$isSessionTemporary)
+
+                $ResultingParams['CimSession'] | Should -BeNullOrEmpty
+                Assert-MockCalled New-CimSession -Times 0  -Exactly -Scope It
+            }
+
+            It 'Returns no Cimsession if ComputerName = "localhost"' {
+                $Fake_PSBoundParameters = @{
+                    Path         = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\TestInc'
+                    ComputerName = 'localhost'
+                }
+                $ResultingParams = New-ParameterTable -BoundParams $Fake_PSBoundParameters -ParameterSetName 'ByParameters' -TempFlag ([ref]$isSessionTemporary)
+
+                $ResultingParams['CimSession'] | Should -BeNullOrEmpty
+                Assert-MockCalled New-CimSession -Times 0  -Exactly -Scope It
+            }
+
+            It 'Returns no Cimsession if ComputerName = "."' {
+                $Fake_PSBoundParameters = @{
+                    Path         = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\TestInc'
+                    ComputerName = '.'
+                }
+                $ResultingParams = New-ParameterTable -BoundParams $Fake_PSBoundParameters -ParameterSetName 'ByParameters' -TempFlag ([ref]$isSessionTemporary)
+
+                $ResultingParams['CimSession'] | Should -BeNullOrEmpty
+                Assert-MockCalled New-CimSession -Times 0  -Exactly -Scope It
+            }
+
+            It 'Returns no Cimsession if InputObject.PSComputerName = "localhost"' {
+                $PipeLineObject = [CimRegistryKey]@{
+                    Path           = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\TestInc'
+                    DefaultValue   = $null
+                    SubKeyCount    = $null
+                    ValueCount     = $null
+                    PSComputerName = 'localhost'
+                    Protocol       = 'Default'
+                    CimSessionId   = ''
+                }
+
+                $Fake_PSBoundParameters = @{
+                    InputObject   = $PipeLineObject
+                }
+                $ResultingParams = New-ParameterTable -BoundParams $Fake_PSBoundParameters -ParameterSetName 'ByInputObject' -TempFlag ([ref]$isSessionTemporary)
+
+                $ResultingParams['CimSession'] | Should -BeNullOrEmpty
+                Assert-MockCalled New-CimSession -Times 0  -Exactly -Scope It
+            }
+
+            It 'Returns no Cimsession if InputObject.PSComputerName overriden by "localhost" in parameters' {
+                $PipeLineObject = [CimRegistryKey]@{
+                    Path           = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\TestInc'
+                    DefaultValue   = $null
+                    SubKeyCount    = $null
+                    ValueCount     = $null
+                    PSComputerName = 'CompFromPipe'
+                    Protocol       = 'Default'
+                    CimSessionId   = ''
+                }
+
+                $Fake_PSBoundParameters = @{
+                    ComputerName = 'localhost'
+                    InputObject   = $PipeLineObject
+                }
+                $ResultingParams = New-ParameterTable -BoundParams $Fake_PSBoundParameters -ParameterSetName 'ByInputObject' -TempFlag ([ref]$isSessionTemporary)
+
+                $ResultingParams['CimSession'] | Should -BeNullOrEmpty
+                Assert-MockCalled New-CimSession -Times 0  -Exactly -Scope It
+            }
+        }
+
     } # Context New-ParameterTable
 
     Context 'New-CimConnection' {

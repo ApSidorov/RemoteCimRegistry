@@ -28,7 +28,7 @@ using module .\CDXMLFunctions.cdxml
 
    Returns general information about the key plus its the Default value from the computer Wks11.
 .EXAMPLE
-   Get-RegistryKey -Path HKEY_LOCAL_MACHINE\SOFTWARE\Notepad++ -GetDefaultValue -Force
+   Get-RegistryKey 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\WORDPAD.EXE' -GetDefaultValue -Force
 
    Trys to read the Default value directly. Useful if the Default value is the only value ever created in a key, and 'hidden' from WMI enumeration.
 #>
@@ -54,7 +54,7 @@ Function Get-RegistryKey {
         [string]
         $Path,
 
-        # Computer name. If you specify a Computer name, a temporary CimSession will be created.
+        # Computer name. Local computer by default (as well as 'localhost' or '.')
         [Parameter(Mandatory,
                    ValueFromPipelineByPropertyName,
                    ParameterSetName='ByParameters_ComputerName',
@@ -147,25 +147,39 @@ Function Get-RegistryKey {
                 if ($TestAccessOutput.ReturnValue -eq 2) {
                     # The path doesn't found - return nothing
                     Write-Verbose -Message "[WMI]: The key was not found."
-                } Else {
-                    # $PSCmdlet.ThrowTerminatingError([CimError]::GetWin32ErrorDescription($TestAccessOutput.ReturnValue, $OperationTarget))
+                } Elseif ($TestAccessOutput.ReturnValue -ne 5) {
+                    # If not an access deny error
                     Throw [CimError]::GetWin32ErrorDescription($TestAccessOutput.ReturnValue, $OperationTarget)
                 }
             }
 
-            If ($TestAccessOutput.ReturnValue -eq 0) {
-                # Main queries
-                Write-Verbose -Message "[WMI]: Enumerating subkeys of the key: '$($CimQueryParam['Key'])'"
-                $CimOutput = Get-cdxmlSubkeyName @CimQueryParam -ErrorAction Stop
-
-                Write-Verbose -Message "[WMI]: Enumerating values  of the key: '$($CimQueryParam['Key'])'"
-                $CimValueNames = Get-cdxmlValueName @CimQueryParam -ErrorAction Stop
+            If ($TestAccessOutput.ReturnValue -in (0,5)) {
 
                 $FinalData = [CIMRegistryKey]::new()
-                $FinalData.Path           = $GivenParameters['Path']
-                # $FinalData.DefaultValue   = $null
-                $FinalData.SubKeyCount   = ($CimOutput.sNames).Count
-                $FinalData.ValueCount    = ($CimValueNames.sNames).Count
+                $FinalData.Path        = $GivenParameters['Path']
+
+                # Main queries
+                Write-Verbose -Message "[WMI]: Enumerating subkeys of the key: '$($CimQueryParam['Key'])'"
+                $CimSubKeyOutput = Get-cdxmlSubkeyName @CimQueryParam -ErrorAction Stop
+                If ($CimSubKeyOutput.ReturnValue -eq 0) {
+                    $FinalData.SubKeyCount = ($CimSubKeyOutput.sNames).Count
+                } Else {
+                    $SubKeyCount = $null
+                    $FinalData.ErrorCode = $CimSubKeyOutput.ReturnValue
+                    Write-Verbose -Message "[WMI]: Error reading subkeys number: '$(([System.ComponentModel.Win32Exception]::new([int32]$($CimSubKeyOutput.ReturnValue))).Message)'"
+                }
+
+                Write-Verbose -Message "[WMI]: Enumerating values  of the key: '$($CimQueryParam['Key'])'"
+                $CimValueOutput = Get-cdxmlValueName @CimQueryParam -ErrorAction Stop
+                If ($CimValueOutput.ReturnValue -eq 0) {
+                    $FinalData.ValueCount = ($CimValueOutput.sNames).Count
+                } Else {
+                    $ValueCount = $null
+                    $FinalData.ErrorCode = $CimValueOutput.ReturnValue
+                    $GetDefaultValue = $false # No point to read the Default Value.
+                    Write-Verbose -Message "[WMI]: Error reading values number: '$(([System.ComponentModel.Win32Exception]::new([int32]$($CimValueOutput.ReturnValue))).Message)'"
+                }
+
                 If ($Session) {
                     $FinalData.PSComputerName = $Session.ComputerName
                     If ($Session.Protocol) {$FinalData.Protocol     = $Session.Protocol}
@@ -257,7 +271,7 @@ Function Get-RegistrySubkey {
         [string]
         $SubkeyName = '*',
 
-        # Computer name or pre-created CimSession object. If you specify a Computer name, a temporary CimSession will be created.
+        # Computer name. Local computer by default (as well as 'localhost' or '.')
         [Parameter(Mandatory,
                    ValueFromPipelineByPropertyName,
                    ParameterSetName='ByParameters_ComputerName',
@@ -269,7 +283,7 @@ Function Get-RegistrySubkey {
         [string]
         $ComputerName,
 
-        # Computer name or pre-created CimSession object. If you specify a Computer name, a temporary CimSession will be created.
+        # Pre-created CimSession object.
         [Parameter(Mandatory,
                    ParameterSetName='ByParameters_CimSession')]
         [Parameter(Mandatory,
@@ -402,6 +416,10 @@ Function Get-RegistrySubkey {
 
    Returns the default value of DirectX key.
 
+.EXAMPLE
+    Get-RegistryValue -Path 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\WRITE.EXE' -Force
+
+    If the key has no values, the command will try to read default value directly.
 #>
 Function Get-RegistryValue {
     # [CmdletBinding(DefaultParameterSetName='ByParameters')]
@@ -439,7 +457,7 @@ Function Get-RegistryValue {
         [string]
         $ValueName = '*',
 
-        # Computer name or pre-created CimSession object. If you specify a Computer name, a temporary CimSession will be created.
+        # Computer name. Local computer by default (as well as 'localhost' or '.')
         [Parameter(Mandatory,
                    ValueFromPipelineByPropertyName,
                    ParameterSetName='ByParameters_ComputerName',
@@ -451,7 +469,7 @@ Function Get-RegistryValue {
         [string]
         $ComputerName,
 
-        # Computer name or pre-created CimSession object. If you specify a Computer name, a temporary CimSession will be created.
+        # Pre-created CimSession object.
         [Parameter(Mandatory,
                    ParameterSetName='ByParameters_CimSession')]
         [Parameter(Mandatory,
@@ -527,10 +545,10 @@ Function Get-RegistryValue {
                 $CimOutput = Get-cdxmlValueName @CimQueryParam -ErrorAction Stop
 
                 $ValueTmp = for ($i = 0; $i -lt ($CimOutput.sNames.Count); $i++) {
-                    [PsCustomObject]([ordered]@{
+                    [PsCustomObject]@{
                         ValueName = $CimOutput.sNames[$i]
                         Type      = $CimOutput.Types[$i]
-                    })
+                    }
                 }
 
                 If (($CimOutput.sNames.Count -eq 0) -and ('(default)' -like $GivenParameters['ValueName']) -and $Force) {
@@ -564,7 +582,7 @@ Function Get-RegistryValue {
                         $FinalData.ValueName      = $ResultValueName
                         $FinalData.ValueType      = $VLT.Type
                         $FinalData.Data           = $Data
-                        $FinalData.InvalidData    = If ($RetVal -ne 0) {$true}
+                        $FinalData.ErrorCode      = $RetVal
                         If ($Session) {
                             $FinalData.PSComputerName = $Session.ComputerName
                             If ($Session.Protocol) {$FinalData.Protocol     = $Session.Protocol}
@@ -605,14 +623,14 @@ Function Get-RegistryValue {
 
    Creates 'MyTest' subkey under the existing 'HKEY_CURRENT_USER\Software' key.
 .EXAMPLE
-   New-RegistryKey -Path 'HKEY_LOCAL_MACHINE\SOFTWARE\JupiterInc\Callisto\OrbitParameters' -Force
+   New-RegistryKey -Path 'HKEY_LOCAL_MACHINE\SOFTWARE\JupiterInc\Callisto\OrbitalParameters' -Force
 
    Creates a tree of subkeys:
       'JupiterInc'
            |
            - 'Callisto'
                  |
-                 - 'OrbitParameters'
+                 - 'OrbitalParameters'
    under the existing key 'HKEY_LOCAL_MACHINE\SOFTWARE'.
 
 
@@ -640,7 +658,7 @@ Function New-RegistryKey {
         [string]
         $Path,
 
-        # Computer name or pre-created CimSession object. If you specify a Computer name, a temporary CimSession will be created.
+        # Computer name. Local computer by default (as well as 'localhost' or '.')
         [Parameter(Mandatory,
                    ValueFromPipelineByPropertyName,
                    ParameterSetName='ByParameters_ComputerName',
@@ -652,7 +670,7 @@ Function New-RegistryKey {
         [string]
         $ComputerName,
 
-        # Computer name or pre-created CimSession object. If you specify a Computer name, a temporary CimSession will be created.
+        # Pre-created CimSession object.
         [Parameter(Mandatory,
                    ParameterSetName='ByParameters_CimSession')]
         [Parameter(Mandatory,
@@ -709,7 +727,7 @@ Function New-RegistryKey {
             $OperationTarget = New-TargetString -ComputerName $Session.ComputerName -Path $GivenParameters['Path']
 
             If ($PSCmdlet.ShouldProcess($OperationTarget,'Create registry key')) {
-                $CimQueryParam = Copy-IDictionary -IDictionary $GivenParameters -Key 'CimSession', 'RootKey', 'Key', 'WhatIf'
+                $CimQueryParam = Copy-IDictionary -IDictionary $GivenParameters -Key 'CimSession', 'RootKey', 'Key'
 
                 # Test if key already exists (WMI in any case will not recreate a key)
                 If (Test-RegistryPath @CimQueryParam) {
@@ -795,7 +813,13 @@ Function New-RegistryKey {
 .EXAMPLE
    Get-RegistryValue -Path 'HKEY_LOCAL_MACHINE\SOFTWARE\JupiterInc' -ValueName RedDwarf -ComputerName SRV053 | Set-RegistryValue -ComputerName Win1803
 
-   Gets registry value RedDwarf from computer SRV053 and creates the same value on computer Win1803. Provided, that the target already has the same registry key.
+   Gets registry value RedDwarf from computer SRV053 and creates the same value on computer Win1803.
+   If key HKEY_CURRENT_USER\Software\MyTest doesn't exist, use switch -Force to create it.
+
+.EXAMPLE
+   Get-RegistryValue -Path 'HKEY_LOCAL_MACHINE\SOFTWARE\SccmInventory' -ValueName Enable | Set-RegistryValue -Data 0
+
+   Reads the current registry value from computer SRV053 and writes new data to it.
 #>
 Function Set-RegistryValue {
     [CmdletBinding(SupportsShouldProcess=$true,
@@ -838,7 +862,7 @@ Function Set-RegistryValue {
         [object]
         $Data,
 
-        # Computer name. If you specify a Computer name, a temporary CimSession will be created..
+        # Computer name. Local computer by default (as well as 'localhost' or '.')
         [Parameter(Mandatory,
                    ValueFromPipelineByPropertyName,
                    ParameterSetName='ByParameters_ComputerName',
@@ -877,7 +901,7 @@ Function Set-RegistryValue {
         [PSCredential]
         $Credential,
 
-        # Overwtire existing value even if data type is different.
+        # Create the key if it doesn't exist, or overwtire the existing value if data type is different.
         [switch]
         $Force,
 
@@ -902,7 +926,10 @@ Function Set-RegistryValue {
     Process {
         Try {
             $isSessionTemporary = $false
+            $createKey = $false
             $GivenParameters = New-ParameterTable -BoundParams $PSBoundParameters -ParameterSetName $PSCmdlet.ParameterSetName -TempFlag ([ref]$isSessionTemporary)
+            # $PSCmdlet.ParameterSetName
+            # Return $PSBoundParameters
             # Add any other parameters with default value
             $Session = $GivenParameters['CimSession']
             $OperationTarget = New-TargetString -ComputerName $Session.ComputerName -Path $GivenParameters['Path']
@@ -910,6 +937,7 @@ Function Set-RegistryValue {
             If ($PSCmdlet.ShouldProcess($OperationTarget,'Set registry value')) {
                 # Test path and permissions.
                 $TestAccessParam  = Copy-IDictionary -IDictionary $GivenParameters -Key 'CimSession', 'RootKey', 'Key'
+                Write-Verbose -Message "[WMI]: Checking access permissions for the key: '$($TestAccessParam['Key'])'"
                 $TestAccessOutput = Test-cdxmlRegistryKeyAccess @TestAccessParam -AccessRequired 2  -ErrorAction Stop
 
                 If (-not $TestAccessOutput) {
@@ -917,27 +945,61 @@ Function Set-RegistryValue {
                 }
 
                 if ($TestAccessOutput.ReturnValue -ne 0) {
-                    Throw [CimError]::GetWin32ErrorDescription($TestAccessOutput.ReturnValue, $OperationTarget)
+                    If (($TestAccessOutput.ReturnValue -eq 2) -and $Force) {
+                        $createKey = $true
+                        Write-Verbose -Message "[WMI]: Key wasn't found: '$($TestAccessParam['Key'])'"
+                    } Else {
+                        Write-Verbose -Message "[WMI]: Key wasn't found: '$($TestAccessParam['Key'])'. Use -Force parameter to create it."
+                        Throw [CimError]::GetWin32ErrorDescription($TestAccessOutput.ReturnValue, $OperationTarget)
+                    }
                 }
 
-                if ($TestAccessOutput.ReturnValue -eq 0) {
-                        # Try to read and detect type
-                        $GetCimQueryParam = Copy-IDictionary -IDictionary $GivenParameters -Key 'CimSession', 'RootKey', 'Key', 'ValueName'
-                        $GetFunctionName = switch ($GivenParameters['ValueType'])
-                        {
-                            'REG_SZ'        { 'Get-cdxmlStringValue'}
-                            'REG_EXPAND_SZ' { 'Get-cdxmlExpandedStringValue'}
-                            'REG_BINARY'    { 'Get-cdxmlBinaryValue'}
-                            'REG_DWORD'     { 'Get-cdxmlDWORDValue'}
-                            'REG_MULTI_SZ'  { 'Get-cdxmlMultiStringValue'}
-                            'REG_QWORD'     { 'Get-cdxmlQWORDValue'}
-                        }
-                        $GetCimOutput = & $GetFunctionName @GetCimQueryParam -ErrorAction Stop
+                if (($TestAccessOutput.ReturnValue -eq 0) -or $createKey) {
+                        If ($createKey) {
+                            $CreateKeyParam  = Copy-IDictionary -IDictionary $GivenParameters -Key 'CimSession', 'RootKey', 'Key'
+                            $NewKeyCimOutput = New-cdxmlRegistryKey @CreateKeyParam -ErrorAction Stop # CreateKey method returns just one value - Win32 error code
+                            If ($NewKeyCimOutput.ReturnValue -ne 0) {
+                                Throw [CimError]::GetWin32ErrorDescription($NewKeyCimOutput.ReturnValue, $OperationTarget)
+                            }
+                            Write-Verbose -Message "[WMI]: New registry key has been created: '$($CreateKeyParam['Key'])'"
+                        } Else {
+                            # Try to read and detect type
+                            $GetCimQueryParam = Copy-IDictionary -IDictionary $GivenParameters -Key 'CimSession', 'RootKey', 'Key', 'ValueName'
+                            $GetFunctionName = switch ($GivenParameters['ValueType'])
+                            {
+                                'REG_SZ'        { 'Get-cdxmlStringValue'}
+                                'REG_EXPAND_SZ' { 'Get-cdxmlExpandedStringValue'}
+                                'REG_BINARY'    { 'Get-cdxmlBinaryValue'}
+                                'REG_DWORD'     { 'Get-cdxmlDWORDValue'}
+                                'REG_MULTI_SZ'  { 'Get-cdxmlMultiStringValue'}
+                                'REG_QWORD'     { 'Get-cdxmlQWORDValue'}
+                            }
+                            # All cdxml functions return ReturnValue = 1 if no value was found.
+                            # BUT! Get-cdxmlMultiStringValue returns 2 (the same as 'no key was found')
 
-                        # Throw if 'Type mismatch' and no Force parameter.
-                        If ($GetCimOutput.ReturnValue -eq 2147749893 -and (-not $Force)) {
-                            Throw [CimError]::GetWin32ErrorDescription($GetCimOutput.ReturnValue, $OperationTarget)
-                        }
+                            Write-Verbose -Message "[WMI]: Checking if the value '$($GetCimQueryParam['ValueName'])' exists"
+                            $GetCimOutput = & $GetFunctionName @GetCimQueryParam -ErrorAction Stop
+
+
+                            # Throw if 'Type mismatch' and no Force parameter.
+                            If ($GetCimOutput.ReturnValue -eq 2147749893 -and (-not $Force)) {
+                                Write-Verbose -Message "[WMI]: Value '$($GetCimQueryParam['ValueName'])' already exists and has different data type. Check for mistakes. Use -Force parameter to overwrite it."
+                                Throw [CimError]::GetWin32ErrorDescription($GetCimOutput.ReturnValue, $OperationTarget)
+                            }
+
+                            If ($VerbosePreference -eq 'Continue') {
+                                If ($GetCimOutput.ReturnValue -eq 0) {
+                                    Write-Verbose -Message "[WMI]: Value was found. Altering its data."
+                                }
+                                If ($GetCimOutput.ReturnValue -in (1,2)) {
+                                    Write-Verbose -Message "[WMI]: Value wasn't found. Creating a new one."
+                                }
+                                If ($GetCimOutput.ReturnValue -eq 2147749893 -and $Force) {
+                                    Write-Verbose -Message "[WMI]: Value has different data type. Overwriting with new type."
+                                }
+                            }
+
+                        } # If ($createKey)
 
                         # Set value.
                         $SetCimQueryParam = Copy-IDictionary -IDictionary $GivenParameters -Key 'CimSession', 'RootKey', 'Key', 'ValueName', 'Data'
@@ -962,7 +1024,6 @@ Function Set-RegistryValue {
                         $FinalData.ValueName      = $GivenParameters['ValueName']
                         $FinalData.ValueType      = $GivenParameters['ValueType']
                         $FinalData.Data           = $GivenParameters['Data']
-                        $FinalData.InvalidData    = $false
                         If ($Session) {
                             $FinalData.PSComputerName = $Session.ComputerName
                             If ($Session.Protocol) {$FinalData.Protocol     = $Session.Protocol}
@@ -998,9 +1059,10 @@ Function Set-RegistryValue {
    In the first case the function will create a temporary CIMSession, and close it afterward.
 
 .EXAMPLE
-   Remove-RegistryKey -Path HKEY_CURRENT_USER\Software\MyTest -ComputerName SERVER011
+   Remove-RegistryKey -Path HKEY_CURRENT_USER\Software\MyTest
 
-   Deletes 'MyTest' key on the SERVER011 computer.
+   Removes 'MyTest' on the LOCAL computer.
+
 .EXAMPLE
    Get-RegistryKey -Path 'HKEY_LOCAL_MACHINE\SOFTWARE\JupiterInc' -ComputerName SERVER011  | Remove-RegistryKey -Confirm:$false
 
@@ -1030,7 +1092,7 @@ Function Remove-RegistryKey {
         [string]
         $Path,
 
-        # Computer name or pre-created CimSession object. If you specify a Computer name, a temporary CimSession will be created.
+        # Computer name. Local computer by default (as well as 'localhost' or '.')
         [Parameter(Mandatory,
                    ValueFromPipelineByPropertyName,
                    ParameterSetName='ByParameters_ComputerName',
@@ -1042,7 +1104,7 @@ Function Remove-RegistryKey {
         [string]
         $ComputerName,
 
-        # Computer name or pre-created CimSession object. If you specify a Computer name, a temporary CimSession will be created.
+        # Pre-created CimSession object.
         [Parameter(Mandatory,
                    ParameterSetName='ByParameters_CimSession')]
         [Parameter(Mandatory,
@@ -1196,7 +1258,7 @@ Function Remove-RegistryValue {
         [string]
         $ValueName,
 
-        # Computer name or pre-created CimSession object. If you specify a Computer name, a temporary CimSession will be created.
+        # Computer name. Local computer by default (as well as 'localhost' or '.')
         [Parameter(Mandatory,
                    ValueFromPipelineByPropertyName,
                    ParameterSetName='ByParameters_ComputerName',
@@ -1208,7 +1270,7 @@ Function Remove-RegistryValue {
         [string]
         $ComputerName,
 
-        # Computer name or pre-created CimSession object. If you specify a Computer name, a temporary CimSession will be created.
+        # Pre-created CimSession object.
         [Parameter(Mandatory,
                    ParameterSetName='ByParameters_CimSession')]
         [Parameter(Mandatory,
@@ -1328,7 +1390,7 @@ Function Remove-RegistryValue {
 Function New-ParameterTable ($BoundParams, $ParameterSetName, [ref]$TempFlag) {
     # $BoundParams is a reference to $PSBoundParameters from a calling function.
     $ParameterList = Copy-IDictionary -IDictionary $BoundParams -Remove 'CimSession', 'ComputerName', 'Protocol', 'Credential', 'InputObject'
-    $TargetComputer = If ($BoundParams['ComputerName']-and ($BoundParams['ComputerName'] -ne 'localhost')) {
+    $TargetComputer = If ($BoundParams['ComputerName']) { # -and ($BoundParams['ComputerName'] -ne 'localhost')
         $BoundParams['ComputerName']
     } ElseIf ($BoundParams['CimSession']) {
         $BoundParams['CimSession']
@@ -1342,15 +1404,13 @@ Function New-ParameterTable ($BoundParams, $ParameterSetName, [ref]$TempFlag) {
         If ($TargetComputer) {
             $CIMSessParam  = Copy-IDictionary -IDictionary $BoundParams -Key 'Protocol','Credential'
             $CIMSessParam['ComputerName'] = $TargetComputer
-        } Else { $CIMSessParam  = @{} }
+        } Else { $CIMSessParam  = @{} } # Empty hashtable, just for the final If statement.
 
     } # 'ByParameters*'
 
     If ($ParameterSetName -like 'ByInputObject*') {
 
         $InputObject   = $BoundParams['InputObject']
-        # If ($InputObject.PSComputerName -eq 'localhost') {$InputObject.PSComputerName = $null}  # localhost compensation
-
 
         # Registry parameters from input object.
         $ParameterList['Path'] = $InputObject.Path
@@ -1382,14 +1442,10 @@ Function New-ParameterTable ($BoundParams, $ParameterSetName, [ref]$TempFlag) {
                 }
             }
 
-            {$InputObject.PSComputerName} {  # -ne 'localhost'
+            {$InputObject.PSComputerName} {
                 ### PSComputerName from InputObject - Precedence #3
                 $CIMSessParam  = Copy-IDictionary -IDictionary $BoundParams -Key 'Protocol','Credential'
-                If ($InputObject.PSComputerName -ne 'localhost') {
-                    $CIMSessParam['ComputerName'] = $InputObject.PSComputerName
-                } Else {
-                    $CIMSessParam['ComputerName'] = $null
-                }
+                $CIMSessParam['ComputerName'] = $InputObject.PSComputerName
                 If (-not $CIMSessParam['Protocol']) {
                     $CIMSessParam['Protocol']   = $InputObject.Protocol
                 }
@@ -1398,7 +1454,7 @@ Function New-ParameterTable ($BoundParams, $ParameterSetName, [ref]$TempFlag) {
     } # 'ByInputObject*'
 
 
-    If ($CIMSessParam['ComputerName']) {
+    If ($CIMSessParam['ComputerName'] -and ($CIMSessParam['ComputerName'] -ne 'localhost') -and ($CIMSessParam['ComputerName'] -ne '.')) {
         $ParameterList['CimSession'] = New-CimConnection @CIMSessParam -NewSessionFlag $TempFlag
     } Else {
         Write-Verbose -Message "[CONNECTION]: Connecting to the local computer. No CimSession was created."
@@ -1453,12 +1509,19 @@ function Copy-IDictionary
 }
 
 <#
-The function returns a hastable.
+The function returns a hashtable.
  #>
 Function Split-RegistryPath ($RegistryPath) {
     if ($RegistryPath.Trim('\') -notmatch '(?<RootKey>^\w+)(?:\\(?<Key>.+))*$') {
         throw "'$RegistryPath' is not a valid registry path."
     }
+
+    $Matches['RootKey'] = $Matches['RootKey'] -replace 'HKLM', 'HKEY_LOCAL_MACHINE'
+    $Matches['RootKey'] = $Matches['RootKey'] -replace 'HKCU', 'HKEY_CURRENT_USER'
+    $Matches['RootKey'] = $Matches['RootKey'] -replace 'HKU',  'HKEY_USERS'
+    $Matches['RootKey'] = $Matches['RootKey'] -replace 'HKCC', 'HKEY_CURRENT_CONFIG'
+    $Matches['RootKey'] = $Matches['RootKey'] -replace 'HKCR', 'HKEY_CLASSES_ROOT'
+
     If ($Matches['RootKey'] -notin ("HKEY_LOCAL_MACHINE",
                                     "HKEY_CURRENT_USER",
                                     "HKEY_USERS",

@@ -11,6 +11,7 @@ class CIMRegistryObject {
     [ValidateSet('Dcom','Wsman','Default')]
     [string]$Protocol = 'Default'
     [string]$CimSessionId # System.Guid
+    [UInt32]$ErrorCode
 }
 
 class CIMRegistryKey:CIMRegistryObject {
@@ -47,7 +48,6 @@ class CIMRegistryValue:CIMRegistryObject {
     [string]$ValueName
     [RegistryDataType]$ValueType
     [object]$Data
-    [bool]$InvalidData
 
     CIMRegistryValue () {}
     CIMRegistryValue ([string]$Path) {

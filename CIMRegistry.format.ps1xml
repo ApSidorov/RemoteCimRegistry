@@ -14,30 +14,24 @@
             <TableHeaders>
               <TableColumnHeader>
                 <Label>PSComputerName</Label>
-                <Width>15</Width>
               </TableColumnHeader>
               <TableColumnHeader>
                 <Label>Key</Label>
-                <Width>40</Width>
               </TableColumnHeader>
               <TableColumnHeader>
                 <Label>DefaultValue</Label>
-                <Width>30</Width>
               </TableColumnHeader>
               <TableColumnHeader>
                 <Label>SubKeyCount</Label>
-                <Width>15</Width>
               </TableColumnHeader>
               <TableColumnHeader>
                 <Label>ValueCount</Label>
-                <Width>15</Width>
               </TableColumnHeader>
             </TableHeaders>
             <TableRowEntries>
               <TableRowEntry>
                 <TableColumnItems>
                   <TableColumnItem>
-                    <!-- <ScriptBlock>If ($_.PSComputerName) {$_.PSComputerName} Else {'localhost'}</ScriptBlock> -->
                     <PropertyName>PSComputerName</PropertyName>
                   </TableColumnItem>
                   <TableColumnItem>
@@ -47,10 +41,12 @@
                    <PropertyName>DefaultValue</PropertyName>
                   </TableColumnItem>
                   <TableColumnItem>
-                   <PropertyName>SubKeyCount</PropertyName>
+                   <!--  <PropertyName>SubKeyCount</PropertyName>  -->
+                   <ScriptBlock>If ($_.SubKeyCount) {$_.SubKeyCount} Else {If ($_.ErrorCode) {'ERROR'}}</ScriptBlock>
                   </TableColumnItem>
                   <TableColumnItem>
-                   <PropertyName>ValueCount</PropertyName>
+                   <!--  <PropertyName>ValueCount</PropertyName>  -->
+                   <ScriptBlock>If ($_.ValueCount) {$_.ValueCount} Else {If ($_.ErrorCode) {'ERROR'}}</ScriptBlock>
                   </TableColumnItem>
                 </TableColumnItems>
               </TableRowEntry>
@@ -70,27 +66,22 @@
             <TableHeaders>
               <TableColumnHeader>
                 <Label>PSComputerName</Label>
-                <Width>15</Width>
               </TableColumnHeader>
               <TableColumnHeader>
                 <Label>ValueName</Label>
-                <Width>30</Width>
               </TableColumnHeader>
               <TableColumnHeader>
                 <Label>ValueType</Label>
-                <Width>15</Width>
                 <Alignment>center</Alignment>
               </TableColumnHeader>
               <TableColumnHeader>
                 <Label>Data</Label>
-                <Width>50</Width>
               </TableColumnHeader>
             </TableHeaders>
             <TableRowEntries>
               <TableRowEntry>
                 <TableColumnItems>
                   <TableColumnItem>
-                    <!-- <ScriptBlock>If ($_.PSComputerName) {$_.PSComputerName} Else {'localhost'}</ScriptBlock> -->
                     <PropertyName>PSComputerName</PropertyName>
                   </TableColumnItem>
                   <TableColumnItem>
@@ -100,7 +91,7 @@
                     <PropertyName>ValueType</PropertyName>
                   </TableColumnItem>
                   <TableColumnItem>
-                    <ScriptBlock>If ($_.InvalidData) {"(Invalid $($_.Type) value)"} Else {$_.Data}</ScriptBlock>
+                    <ScriptBlock>If ($_.ErrorCode) {"(Invalid $($_.ValueType) value)"} Else {$_.Data}</ScriptBlock>
                   </TableColumnItem>
                 </TableColumnItems>
               </TableRowEntry>

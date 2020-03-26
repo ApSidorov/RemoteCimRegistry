@@ -67,13 +67,16 @@ Describe 'New functions' {
         $MissingParentKeyName = 'SOFTWARE\Ankh-Morpork\Unseen-U'
         $MissingParentKeyPath = 'HKEY_LOCAL_MACHINE\' + $MissingParentKeyName
         Mock Test-cdxmlRegistryKeyAccess  { [PSCustomObject]@{ReturnValue = 2; bGranted = $false} } { $PSBoundParameters.Key -eq $MissingParentKeyName }
+        Mock New-cdxmlRegistryKey         { [PSCustomObject]@{ReturnValue = 0} }                    { $PSBoundParameters.Key -eq $MissingParentKeyName }
 
         # New key under missing key (created with Force parameter)
         $MissParentSubKeyName = 'SOFTWARE\Ankh-Morpork\Unseen-U\Library'
         $MissParentSubKeyPath = 'HKEY_LOCAL_MACHINE\' + $MissParentSubKeyName
-        Mock New-cdxmlRegistryKey         { [PSCustomObject]@{ReturnValue = 0} }                   { $PSBoundParameters.Key -eq $MissParentSubKeyName }
+        Mock New-cdxmlRegistryKey         { [PSCustomObject]@{ReturnValue = 0} } { $PSBoundParameters.Key -eq $MissParentSubKeyName }
 
-
+        # Value under missing key
+        $MissingSubKeyValue = 'TowerHeight'
+        Mock Set-cdxmlDWORDValue { [PSCustomObject]@{ReturnValue = 0} }  { ($PSBoundParameters.Key -eq $MissingParentKeyName) -and ($PSBoundParameters.ValueName -eq $MissingSubKeyValue) }
 
 #endregion
 
@@ -142,8 +145,8 @@ Describe 'New functions' {
                 $NewKeyResult.Data | Should -Be 'DiscWorld'
             }
 
-            It 'InvalidData flag must be false' {
-                $NewKeyResult.InvalidData | Should -Be $false
+            It 'ErrorCode must be zero' {
+                $NewKeyResult.ErrorCode | Should -Be 0
             }
 
             It 'Calls proper cdxml functions for single String value' {
@@ -171,9 +174,15 @@ Describe 'New functions' {
             Assert-MockCalled Set-cdxmlStringValue -Times 1 -Exactly -Scope it
         }
 
-
         It 'Throws if the key does not exist' {
             { Set-RegistryValue -Path $MissingParentKeyPath  -ValueName 'Location' -ValueType REG_SZ -Data 'DiscWorld' -ErrorAction Stop} | Should -Throw 'Registry key does not exist'
+        }
+
+        It 'Creates missing key and value in it if Force used' {
+            $ValUnderNewKey = Set-RegistryValue -Path $MissingParentKeyPath  -ValueName $MissingSubKeyValue -ValueType REG_DWORD -Data 800 -ErrorAction Stop -Force
+            Assert-MockCalled New-cdxmlRegistryKey -Times 1 -Exactly -Scope it
+            $ValUnderNewKey.Path | Should -Be $MissingParentKeyPath
+
         }
 
         It 'Throws if it has no permissions on the key' {

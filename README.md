@@ -14,7 +14,6 @@ Pipeline support lets you 'copy' registry settings from one computer to another.
 * PowerShell version : 5.0 and later.
 * Operating system   : Microsoft Windows.
 
-**Note**: The module seems to work on PowerShell Core 7 RC1. Pester test also looks good. However, I can't guarantee full compatability yet. 
 
 ### Installing
 
