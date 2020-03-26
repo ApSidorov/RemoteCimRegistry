@@ -10,8 +10,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - All functions: Path parameter accepts short root key names, e.g. HKLM instead of HKEY_LOCAL_MACHINE.
 - Set-RegistryValue: Force parameter creates registry key if it's not exist on a target computer.
 - Get-RegistryKey: now returns a registry key object even if you have no access to a key. SubKeyCount and ValueCount properties will show 'ERROR' instead of numbers.
-- Ability for users to edit their membership
-- Meta titles/descriptions throughout the app
 
 ### Changed
 - Table view for the RegistryValue object now shows the type of an invalid data.
