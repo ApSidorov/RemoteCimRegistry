@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - All functions: ComputerName parameter now accepts 'localhost' and '.' as arguments. To copy registry keys/values from a remote computer to the local registry.
 - All functions: Path parameter accepts short root key names, e.g. HKLM instead of HKEY_LOCAL_MACHINE.
-- Set-RegistryValue: Force parameter creates registry key if it's not exist on a target computer.
+- Set-RegistryValue: Force parameter creates registry key if it doesn't exist on a target computer.
 - Get-RegistryKey: now returns a registry key object even if you have no access to a key. SubKeyCount and ValueCount properties will show 'ERROR' instead of numbers.
 
 ### Changed
